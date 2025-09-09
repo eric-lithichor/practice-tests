@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "test": "npx playwright test --headed",
+    "oneTest": "npx playwright test --headed --grep \"Invalid user\"",
+    "oneFile": "npx playwright test --headed tests/ChatGPTTests.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.1"
+  }
+}
