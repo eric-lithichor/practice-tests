@@ -1,7 +1,7 @@
 {
   "scripts": {
     "test": "npx playwright test --headed",
-    "oneTest": "npx playwright test --headed --grep \"Invalid user\"",
+    "oneTest": "npx playwright test --headed --grep \"Add to and remove from cart\"",
     "oneFile": "npx playwright test --headed tests/ChatGPTTests.spec.js"
   },
   "devDependencies": {

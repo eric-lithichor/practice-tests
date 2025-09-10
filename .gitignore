@@ -4,5 +4,3 @@ test-results
 package-lock.json
 
 .env
-findings/
-tests2
