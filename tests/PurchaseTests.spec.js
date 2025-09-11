@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 import ShoppingCartPage from '../pageobjects/ShoppingCartPage';
 dotenv.config();
 
-const username = process.env.USERNAME;;
+const username = process.env.USERNAME;
 
 test('Add to and remove from cart', async ({page}) => {
     const loginAction = new LoginAction(page);
@@ -19,7 +19,7 @@ test('Add to and remove from cart', async ({page}) => {
     
     // Get random product and add it to the cart
     const product = Products.getRandomProduct();
-    await productsPage.addProductToCart(product);
+    await productsPage.addItemToCart(product);
 
     // Verify item is in cart
     // badge has correct number
@@ -37,3 +37,49 @@ test('Add to and remove from cart', async ({page}) => {
     itemInCart = await shoppingCart.verifyItemInCart(product);
     assert.isFalse(itemInCart);
 });
+
+test.skip('Add and remove multiple items from cart', async ({page}) => {
+    const loginAction = new LoginAction(page);
+    const productsPage = new ProductsPage(page);
+    const shoppingCart = new ShoppingCartPage(page);
+    const maxItems = 3;
+
+    await loginAction.login(username);
+    
+    // get three unique products to add to the cart
+    const products = [];
+    let product;
+    while(products.length < maxItems) {
+        product = Products.getRandomProduct();
+        if(!products.includes(product)) {
+            products.push(product);
+        }
+    }
+
+    // add items to the cart
+    for(let x = 0; x < products.length; x++) {
+        console.log(products[x]);
+        await productsPage.addItemToCart(products[x]);
+    }
+
+    // go to the cart and verify the items were added
+    await productsPage.viewCart();
+    let itemsInCart = true;
+    for(let x = 0; x < products.length; x++) {
+        itemsInCart = itemsInCart && await shoppingCart.verifyItemInCart(product);
+    }
+    assert.isTrue(itemsInCart, "Expected all items to be in the cart, but not all were.");
+
+    // remove the items from the cart while still on the Products page
+    await shoppingCart.continueShopping();
+    for(let x = 0; x < products.length; x ++) {
+        await productsPage.removeItemFromCart(products[x]);
+    }
+
+    // verify items were removed
+    itemsInCart = false;
+    for(let x = 0; x < products.length; x++) {
+        itemsInCart = itemsInCart || await shoppingCart.verifyItemInCart(product);
+    }
+    assert.isFalse(itemsInCart, "Expected none of the items to be in the cart, but at least one was.");
+})

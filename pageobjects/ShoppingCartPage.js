@@ -22,4 +22,8 @@ export default class ShoppingCartPage extends BasePage {
         // await removeButton.waitFor({state:"visible"});
         await removeButton.click();
     }
+
+    async continueShopping() {
+        await this.page.locator('#continue-shopping').click();
+    }
 }
