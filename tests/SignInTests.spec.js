@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 import LoginPage from '../pageobjects/LoginPage';
 
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const username = process.env.USERNAME;
 const lockedOut = process.env.LOCKEDOUTUSER;

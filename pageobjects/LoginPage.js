@@ -1,5 +1,6 @@
 import BasePage from "./BasePage";
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 let page;
 
