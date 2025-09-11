@@ -28,6 +28,12 @@ test('Add to and remove from cart', async ({page}) => {
 
     // shopping cart contains the correct item
     await productsPage.viewCart();
-    const itemInCart = await shoppingCart.verifyItemInCart(product);
+    let itemInCart = await shoppingCart.verifyItemInCart(product);
     assert.isTrue(itemInCart, `Expected ${product} to be in the shopping cart, but it wasn't.`);
+
+    // Remove item from the cart
+    await shoppingCart.removeItemFromCart(product);
+    // verify item was removed
+    itemInCart = await shoppingCart.verifyItemInCart(product);
+    assert.isFalse(itemInCart);
 });
