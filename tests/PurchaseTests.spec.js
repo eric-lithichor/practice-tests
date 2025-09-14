@@ -10,6 +10,8 @@ dotenv.config();
 
 const username = process.env.USERNAME;
 
+// This test adds one item to the shopping cart, then removes it by
+// clicking Remove in the shopping cart
 test('Add to and remove from cart', async ({page}) => {
     const loginAction = new LoginAction(page);
     const productsPage = new ProductsPage(page);
@@ -38,15 +40,20 @@ test('Add to and remove from cart', async ({page}) => {
     assert.isFalse(itemInCart);
 });
 
-test.skip('Add and remove multiple items from cart', async ({page}) => {
+// This test adds more than one item to the shopping cart, then removes
+// them by clicking Remove on the Product page
+test('Add and remove multiple items from cart', async ({page}) => {
     const loginAction = new LoginAction(page);
     const productsPage = new ProductsPage(page);
     const shoppingCart = new ShoppingCartPage(page);
     const maxItems = 3;
+    if(maxItems > Products.getNumberOfProducts()) {
+        throw new Error("You can't add more items than there are products");
+    }
 
     await loginAction.login(username);
     
-    // get three unique products to add to the cart
+    // get unique products to add to the cart
     const products = [];
     let product;
     while(products.length < maxItems) {
@@ -77,6 +84,7 @@ test.skip('Add and remove multiple items from cart', async ({page}) => {
     }
 
     // verify items were removed
+    await productsPage.viewCart();
     itemsInCart = false;
     for(let x = 0; x < products.length; x++) {
         itemsInCart = itemsInCart || await shoppingCart.verifyItemInCart(product);

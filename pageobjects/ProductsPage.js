@@ -10,8 +10,6 @@ export default class ProductsPage extends BasePage {
         this.itemsInCart = this.cart.locator('.shopping_cart_badge');
     }
 
-    // This function is unstable; sometimes the element resolves to multiple elements, even
-    // after waiting, checking that it's attached and visible, and disabling strict mode
     async addItemToCart(product) {
         await this.page.waitForSelector('#inventory_container.inventory_container');
         const buttonId = `add-to-cart-${StringHelper.spacesToDashes(product)}`.toLowerCase();

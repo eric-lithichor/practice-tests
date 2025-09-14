@@ -17,9 +17,7 @@ export default class ShoppingCartPage extends BasePage {
 
     async removeItemFromCart(item) {
         const buttonTestId = `remove-${StringHelper.spacesToDashes(item)}`.toLowerCase();
-        // const removeButton = await this.page.locator(`#${buttonId}`).getByRole('button');
         const removeButton = await this.page.locator(`[data-test="${buttonTestId}"]`);
-        // await removeButton.waitFor({state:"visible"});
         await removeButton.click();
     }
 
