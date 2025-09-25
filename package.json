@@ -1,7 +1,7 @@
 {
   "scripts": {
     "test": "npx playwright test --headed",
-    "oneTest": "npx playwright test --headed --grep \"Add and remove multiple items from cart\"",
+    "oneTest": "npx playwright test --headed --grep \"Sort Z to A\"",
     "oneFile": "npx playwright test --headed tests/ChatGPTTests.spec.js"
   },
   "devDependencies": {

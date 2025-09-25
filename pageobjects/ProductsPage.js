@@ -1,3 +1,4 @@
+import SortOrder from "../data/SortOrder";
 import StringHelper from "../data/StringHelper";
 import BasePage from "./BasePage";
 
@@ -63,5 +64,24 @@ export default class ProductsPage extends BasePage {
 
     async viewCart() {
         await this.cart.click();
+    }
+
+    async sortProducts(sortMethod) {
+        
+        const sortMethodSelector = await this.page.locator('[data-test="product-sort-container"]');
+        
+        const sortIdentifier = SortOrder.getSortidentifier(sortMethod, 'label');
+        await sortMethodSelector.selectOption({label: sortIdentifier});
+
+        await this.page.waitForSelector('.inventory_list');
+    }
+
+    async getProductTitles() {
+        let allProductTitles = "";
+        const arrayOfTitleElements = await this.page.locator('.inventory_list').locator('.inventory_item_name ').all();
+        for(let x = 0; x < arrayOfTitleElements.length; x++) {
+            allProductTitles += ` ${await arrayOfTitleElements[x].textContent()}`;
+        }
+        return allProductTitles;
     }
 }
