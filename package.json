@@ -2,7 +2,7 @@
   "scripts": {
     "test": "npx playwright test --headed",
     "oneTest": "npx playwright test --headed --grep \"Sort Z to A\"",
-    "oneFile": "npx playwright test --headed tests/ChatGPTTests.spec.js"
+    "oneFile": "npx playwright test --headed tests/SortingTests.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2"

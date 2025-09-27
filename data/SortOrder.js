@@ -25,4 +25,22 @@ export default class SortOrder {
     static getSortidentifier(order, type) {
         return sortMethods[order.toLowerCase()][type.toLowerCase()];
     }
+
+    static isDescending(arry) {
+        for(let x = 1; x < arry.length; x++) {
+            if(arry[x] > arry[x-1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static isAscending(arry) {
+        for(let x = 1; x < arry.length; x++) {
+            if(arry[x] < arry[x-1]) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

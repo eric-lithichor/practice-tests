@@ -67,21 +67,31 @@ export default class ProductsPage extends BasePage {
     }
 
     async sortProducts(sortMethod) {
-        
         const sortMethodSelector = await this.page.locator('[data-test="product-sort-container"]');
-        
         const sortIdentifier = SortOrder.getSortidentifier(sortMethod, 'label');
+        
         await sortMethodSelector.selectOption({label: sortIdentifier});
-
-        await this.page.waitForSelector('.inventory_list');
     }
-
+    
     async getProductTitles() {
-        let allProductTitles = "";
+        await this.page.waitForSelector('.inventory_list');
+        let allProductTitles = [];
         const arrayOfTitleElements = await this.page.locator('.inventory_list').locator('.inventory_item_name ').all();
         for(let x = 0; x < arrayOfTitleElements.length; x++) {
-            allProductTitles += ` ${await arrayOfTitleElements[x].textContent()}`;
+            let itemPrice = await arrayOfTitleElements[x].textContent();
+            allProductTitles.push(itemPrice);
         }
         return allProductTitles;
+    }
+    
+    async getProductPrices() {
+        await this.page.waitForSelector('.inventory_list');
+        let allProductPrices = [];
+        const arrayOfTitleElements = await this.page.locator('.inventory_list').locator('.inventory_item_price ').all();
+        for(let x = 0; x < arrayOfTitleElements.length; x++) {
+            let itemPrice = Number((await arrayOfTitleElements[x].textContent()).replace('$', ''));
+            allProductPrices.push(itemPrice);
+        }
+        return allProductPrices;
     }
 }
