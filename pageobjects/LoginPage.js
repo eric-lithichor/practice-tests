@@ -8,7 +8,7 @@ let usernameField;
 let passwordField;
 let loginButton;
 
-const password = process.env.PASSWORD;
+const standardPassword = process.env.PASSWORD;
 const url = process.env.BASEURL;
 
 export default class LoginPage extends BasePage {
@@ -27,7 +27,7 @@ export default class LoginPage extends BasePage {
         await page.goto(url);
     }
 
-    async login(username) {
+    async login(username, password = standardPassword) {
         await usernameField.fill(username);
         await passwordField.fill(password);
         await loginButton.click();
@@ -35,8 +35,6 @@ export default class LoginPage extends BasePage {
 
     async getErrorMessage() {
         let loginErrorMessage = await page.locator('[data-test="error"]').innerText();
-        // let loginErrorMessage = await page.locator('[data-test="error"]').textContext();
-
         return loginErrorMessage;
     }
 }
