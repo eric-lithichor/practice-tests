@@ -56,4 +56,15 @@ test("Invalid user", async ({page}) => {
     const error = await loginPage.getErrorMessage();
     expect(error).toContain(invalidUserError);
 });
+
+test("Invalid password", async ({page}) => {
+    const loginPage = new LoginPage(page);
+    const invalidUserError = "Epic sadface: Username and password do not match any user in this service";
+
+    await loginPage.navigateToBasePage();
+    await loginPage.login(username, "IUGFDX");
+
+    const error = await loginPage.getErrorMessage();
+    expect(error).toContain(invalidUserError);
+});
     

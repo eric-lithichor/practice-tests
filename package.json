@@ -1,7 +1,7 @@
 {
   "scripts": {
     "test": "npx playwright test --headed",
-    "oneTest": "npx playwright test --headed --grep \"Sort Z to A\"",
+    "oneTest": "npx playwright test --headed --grep \"Invalid user\"",
     "oneFile": "npx playwright test --headed tests/SortingTests.spec.js"
   },
   "devDependencies": {
