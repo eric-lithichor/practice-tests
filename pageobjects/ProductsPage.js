@@ -112,4 +112,16 @@ export default class ProductsPage extends BasePage {
         }
         return itemsInCart;
     }
+
+    // since the presence of the item is checked on the fly and we
+    // aren't saving them, the check needs to use OR
+    async verifyProductsNotPresent(products) {
+        const shoppingCart = new ShoppingCartPage(this.page);
+        await this.viewCart();
+        let itemsInCart = false;
+        for(let x = 0; x < products.length; x++) {
+            itemsInCart = itemsInCart || await shoppingCart.verifyItemInCart([products[x]]);
+        }
+        return itemsInCart;
+    }
 }

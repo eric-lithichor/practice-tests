@@ -67,6 +67,6 @@ test('Add and remove multiple items from cart', async ({page}) => {
 
     // verify items were removed
     productsPresent = true;
-    productsPresent = await productsPage.verifyProductsPresent(products);
+    productsPresent = await productsPage.verifyProductsNotPresent(products);
     assert.isFalse(productsPresent, "Expected none of the items to be in the cart, but at least one was.");
 })
