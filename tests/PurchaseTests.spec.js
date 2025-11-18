@@ -47,35 +47,17 @@ test('Add and remove multiple items from cart', async ({page}) => {
     const productsPage = new ProductsPage(page);
     const shoppingCart = new ShoppingCartPage(page);
     const maxItems = 3;
-    if(maxItems > Products.getNumberOfProducts()) {
-        throw new Error("You can't add more items than there are products");
-    }
 
     await loginAction.login(username);
+
+    // add three random products to shopping cart
+    const products = Products.createListOfProducts(maxItems);
+    await productsPage.addListOfItemsToCart(products);
     
-    // get unique products to add to the cart
-    const products = [];
-    let product;
-    while(products.length < maxItems) {
-        product = Products.getRandomProduct();
-        if(!products.includes(product)) {
-            products.push(product);
-        }
-    }
-
-    // add items to the cart
-    for(let x = 0; x < products.length; x++) {
-        console.log(products[x]);
-        await productsPage.addItemToCart(products[x]);
-    }
-
     // go to the cart and verify the items were added
-    await productsPage.viewCart();
-    let itemsInCart = true;
-    for(let x = 0; x < products.length; x++) {
-        itemsInCart = itemsInCart && await shoppingCart.verifyItemInCart(product);
-    }
-    assert.isTrue(itemsInCart, "Expected all items to be in the cart, but not all were.");
+    let productsPresent = false;
+    productsPresent = await productsPage.verifyProductsPresent(products);
+    assert.isTrue(productsPresent, "Expected all items to be in the cart, but not all were.");
 
     // remove the items from the cart while still on the Products page
     await shoppingCart.continueShopping();
@@ -84,10 +66,7 @@ test('Add and remove multiple items from cart', async ({page}) => {
     }
 
     // verify items were removed
-    await productsPage.viewCart();
-    itemsInCart = false;
-    for(let x = 0; x < products.length; x++) {
-        itemsInCart = itemsInCart || await shoppingCart.verifyItemInCart(product);
-    }
-    assert.isFalse(itemsInCart, "Expected none of the items to be in the cart, but at least one was.");
+    productsPresent = true;
+    productsPresent = await productsPage.verifyProductsNotPresent(products);
+    assert.isFalse(productsPresent, "Expected none of the items to be in the cart, but at least one was.");
 })

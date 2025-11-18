@@ -1,6 +1,7 @@
 import SortOrder from "../data/SortOrder";
 import StringHelper from "../data/StringHelper";
 import BasePage from "./BasePage";
+import ShoppingCartPage from "./ShoppingCartPage";
 
 export default class ProductsPage extends BasePage {
     constructor(pageIn) {
@@ -32,6 +33,13 @@ export default class ProductsPage extends BasePage {
                 }
                 await this.page.waitForTimeout(250);
             }
+        }
+    }
+
+    async addListOfItemsToCart(items) {
+        for(let x = 0; x < items.length; x++) {
+            console.log(items[x]);
+            await this.addItemToCart(items[x]);
         }
     }
 
@@ -93,5 +101,27 @@ export default class ProductsPage extends BasePage {
             allProductPrices.push(itemPrice);
         }
         return allProductPrices;
+    }
+
+    async verifyProductsPresent(products) {
+        const shoppingCart = new ShoppingCartPage(this.page);
+        await this.viewCart();
+        let itemsInCart = true;
+        for(let x = 0; x < products.length; x++) {
+            itemsInCart = itemsInCart && await shoppingCart.verifyItemInCart([products[x]]);
+        }
+        return itemsInCart;
+    }
+
+    // since the presence of the item is checked on the fly and we
+    // aren't saving them, the check needs to use OR
+    async verifyProductsNotPresent(products) {
+        const shoppingCart = new ShoppingCartPage(this.page);
+        await this.viewCart();
+        let itemsInCart = false;
+        for(let x = 0; x < products.length; x++) {
+            itemsInCart = itemsInCart || await shoppingCart.verifyItemInCart([products[x]]);
+        }
+        return itemsInCart;
     }
 }
