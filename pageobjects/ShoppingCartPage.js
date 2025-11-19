@@ -7,6 +7,8 @@ export default class ShoppingCartPage extends BasePage {
     constructor(pageIn) {
         super(pageIn);
         this.page = pageIn;
+
+        this.checkoutButton = this.page.locator('[data-test="checkout"]');
     }
     
     async verifyItemInCart(item) {
@@ -23,5 +25,9 @@ export default class ShoppingCartPage extends BasePage {
 
     async continueShopping() {
         await this.page.locator('#continue-shopping').click();
+    }
+
+    async checkout() {
+        await this.checkoutButton.click();
     }
 }
