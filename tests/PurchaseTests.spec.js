@@ -6,6 +6,10 @@ import { assert } from 'chai';
 
 import dotenv from 'dotenv';
 import ShoppingCartPage from '../pageobjects/ShoppingCartPage';
+import CheckoutData from '../data/CheckoutData';
+import CheckoutPage from '../pageobjects/CheckoutPage';
+import CheckoutAction from '../actionobjects/CheckoutAction';
+import CheckoutOverviewPage from '../pageobjects/CheckoutOverviewPage';
 dotenv.config();
 
 const username = process.env.USERNAME;
@@ -69,4 +73,31 @@ test('Add and remove multiple items from cart', async ({page}) => {
     productsPresent = true;
     productsPresent = await productsPage.verifyProductsNotPresent(products);
     assert.isFalse(productsPresent, "Expected none of the items to be in the cart, but at least one was.");
+})
+
+test('Checkout with multiple items', async ({page}) => {
+    const loginAction = new LoginAction(page);
+    const productsPage = new ProductsPage(page);
+    const checkoutAction = new CheckoutAction(page);
+    const checkoutOverviewPage = new CheckoutOverviewPage(page);
+
+    const checkoutData = CheckoutData.getPersonalData();
+
+    await loginAction.login(username);
+
+    // Add two random items to shopping cart
+    const products = Products.createListOfProducts(2);
+    await productsPage.addListOfItemsToCart(products);
+
+    // go to the cart and fill out the form
+    await checkoutAction.beginCheckout(checkoutData);
+
+    // verify correct items are in the cart
+    const itemsInOverview = await checkoutOverviewPage.verifyItemsInOverview(products);
+    assert.isTrue(itemsInOverview, "At least one item was not in the checkout overview");
+    // click finish
+    await checkoutOverviewPage.finish();
+    // verify message
+    const checkoutMessageCorrect = await checkoutOverviewPage.verifyCheckoutMessage();
+    assert.isTrue(checkoutMessageCorrect);
 })
