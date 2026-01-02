@@ -1,7 +1,7 @@
 {
   "scripts": {
     "test": "npx playwright test --headed",
-    "oneTest": "npx playwright test --headed --grep \"Checkout with multiple items\"",
+    "oneTest": "npx playwright test --headed --grep \"Reset app state\"",
     "oneFile": "npx playwright test --headed tests/SortingTests.spec.js"
   },
   "devDependencies": {

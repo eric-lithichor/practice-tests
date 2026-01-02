@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import LoginPage from '../pageobjects/LoginPage';
 
 import dotenv from 'dotenv';
+import MenuPage from '../pageobjects/MenuPage';
 dotenv.config();
 
 const username = process.env.USERNAME;
@@ -12,6 +13,8 @@ const url = process.env.BASEURL;
 const itemName = "Sauce Labs Fleece Jacket";
 
 test("Sign in", async ({page}) => {
+    const menuPage = new MenuPage(page);
+
     const usernameField = page.locator("#user-name");
     const passwordField = page.locator("#password");
     const loginButton = page.locator("#login-button");
@@ -28,11 +31,7 @@ test("Sign in", async ({page}) => {
 
     expect(description).toContain("49.99");
 
-    const menu = page.getByRole('button', { name: 'Open Menu' });
-    const logout = page.locator('[data-test="logout-sidebar-link"]');
-
-    await menu.click();
-    await logout.click();
+    await menuPage.logout();
 });
 
 test("Locked Out", async ({page}) => {

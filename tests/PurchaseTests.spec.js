@@ -7,7 +7,6 @@ import { assert } from 'chai';
 import dotenv from 'dotenv';
 import ShoppingCartPage from '../pageobjects/ShoppingCartPage';
 import CheckoutData from '../data/CheckoutData';
-import CheckoutPage from '../pageobjects/CheckoutPage';
 import CheckoutAction from '../actionobjects/CheckoutAction';
 import CheckoutOverviewPage from '../pageobjects/CheckoutOverviewPage';
 dotenv.config();
@@ -60,7 +59,8 @@ test('Add and remove multiple items from cart', async ({page}) => {
     
     // go to the cart and verify the items were added
     let productsPresent = false;
-    productsPresent = await productsPage.verifyProductsPresent(products);
+    await productsPage.viewCart();
+    productsPresent = await shoppingCart.verifyProductsPresent(products);
     assert.isTrue(productsPresent, "Expected all items to be in the cart, but not all were.");
 
     // remove the items from the cart while still on the Products page
