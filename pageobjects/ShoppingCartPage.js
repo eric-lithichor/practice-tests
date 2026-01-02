@@ -44,7 +44,6 @@ export default class ShoppingCartPage extends BasePage {
     async countItemsInCart() {
         const items = await this.listOfItems;
         const count = await items.count();
-        // the two remaining divs are the quantity and description labels
         return count;
     }
 }
